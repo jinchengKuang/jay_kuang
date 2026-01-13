@@ -1,0 +1,236 @@
+{
+    "site": {
+        "title": "Jay Kuang Portfolio",
+        "logo": "jay_kuang.sh",
+        "nav": [
+            {
+                "name": "Home",
+                "url": "#"
+            },
+            {
+                "name": "Education",
+                "url": "#education"
+            },
+            {
+                "name": "Experience",
+                "url": "#experience"
+            },
+            {
+                "name": "Skills",
+                "url": "#skills"
+            },
+            {
+                "name": "Projects",
+                "url": "#projects"
+            },
+            {
+                "name": "Contact",
+                "url": "#contact"
+            }
+        ]
+    },
+    "profile": {
+        "name": "Jay Kuang",
+        "role": "Software Architect & Engineer",
+        "role_highlight": "Architect",
+        "hero_text": "I build scalable distributed systems and high-performance web applications with a focus on developer experience and reliability.",
+        "availability": "AVAILABLE FOR OPPORTUNITIES",
+        "github_url": "#",
+        "linkedin_url": "#",
+        "resume_url": "#"
+    },
+    "terminal": {
+        "user": "jay",
+        "machine": "zsh",
+        "dimensions": "80x24",
+        "init_command": "jay.init()",
+        "init_messages": [
+            {
+                "text": "Initializing profile components...",
+                "style": "italic text-slate-400 dark:text-slate-500"
+            },
+            {
+                "text": "[SUCCESS] Load core.skills",
+                "style": "font-bold text-emerald-600 dark:text-emerald-400"
+            },
+            {
+                "text": "[SUCCESS] Connect to database.history",
+                "style": "font-bold text-emerald-600 dark:text-emerald-400"
+            }
+        ],
+        "bio_command": "cat bio.json",
+        "bio_json": {
+            "name": "Jay Kuang",
+            "role": "SDE II",
+            "location": "San Francisco, CA",
+            "stack": [
+                "Go",
+                "Rust",
+                "React",
+                "K8s"
+            ],
+            "focus": "Distributed Systems"
+        }
+    },
+    "education": {
+        "heading": "Education",
+        "certs_heading": "Certifications",
+        "degrees": [
+            {
+                "degree": "B.S. in Computer Science",
+                "school": "University of Technology",
+                "year": "2016 - 2020",
+                "details": [
+                    "Focus in Operating Systems & Algorithms",
+                    "GPA: 3.9/4.0",
+                    "Dean's List (All Semesters)"
+                ]
+            },
+            {
+                "degree": "B.S. in Computer Science",
+                "school": "University of Technology",
+                "year": "2016 - 2020",
+                "details": [
+                    "Focus in Operating Systems & Algorithms",
+                    "GPA: 3.9/4.0",
+                    "Dean's List (All Semesters)"
+                ]
+            }
+        ],
+        "certifications": []
+    },
+    "experience": {
+        "heading": "Experience",
+        "items": [
+            {
+                "role": "Senior Software Engineer",
+                "company": "CloudTech Systems",
+                "period": "2022 - Present",
+                "description": "Leading the development of a high-throughput messaging backbone using Go and gRPC. Improved system latency by 40% and managed zero-downtime migrations for 50M+ users.",
+                "icon": "work"
+            },
+            {
+                "role": "SDE II",
+                "company": "Innovate.io",
+                "period": "2020 - 2022",
+                "description": "Full-stack developer focused on React and Node.js. Architected a micro-frontend solution that allowed multiple teams to deploy independently.",
+                "icon": "work"
+            },
+            {
+                "role": "Software Engineer Intern",
+                "company": "DataDynamics",
+                "period": "2019 - 2020",
+                "description": "Contributed to data visualization dashboards using D3.js. Optimized SQL queries resulting in 25% faster report generation.",
+                "icon": "school"
+            }
+        ]
+    },
+    "skills": {
+        "heading": "Technical Skills",
+        "description": "My technical toolkit for building high-performance systems.",
+        "categories": [
+            {
+                "category": "Languages",
+                "icon": "code",
+                "items": [
+                    "Go",
+                    "Rust",
+                    "Python",
+                    "TypeScript",
+                    "C++",
+                    "SQL"
+                ]
+            },
+            {
+                "category": "Frameworks",
+                "icon": "layers",
+                "items": [
+                    "React",
+                    "Next.js",
+                    "Node.js",
+                    "gRPC",
+                    "Django",
+                    "PostgreSQL"
+                ]
+            },
+            {
+                "category": "Tools & Cloud",
+                "icon": "construction",
+                "items": [
+                    "Docker",
+                    "Kubernetes",
+                    "AWS",
+                    "Terraform",
+                    "Git",
+                    "Redis"
+                ]
+            }
+        ]
+    },
+    "projects": {
+        "heading": "Featured Projects",
+        "description": "A selection of my technical builds and open-source contributions.",
+        "items": [
+            {
+                "title": "Distributed Crawler",
+                "description": "A high-performance web crawler built in Go using a worker-pool pattern with Redis for queue management.",
+                "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBqWb5SlswO0g5pGJ2tWKFOB09iuKmrEODw1EPFRFGA9l1RoSfa6MY9nx4Pq4q4ducPPBMSu4Rdi_oKwAn-6qL7-QhRKY4dkJFJWcUbdRmW-0LujuDMlwwsPpNxmlIniKHrPpDwxYBZyyP2oUJ9ISHy4FE9zN64_cGgBmtDITnS1IkHOfhyCWcRZm4MymR5GlG9Ft2FoPKDbWW85TEzVL25mSxU5mF2xfoTuKujqk2EMJwkHx5_mjQ6UktPj_9-qOxLosRI4Zt93_gp",
+                "tags": [
+                    "GO",
+                    "REDIS",
+                    "DOCKER"
+                ],
+                "links": [
+                    {
+                        "type": "link",
+                        "url": "#"
+                    },
+                    {
+                        "type": "code",
+                        "url": "#"
+                    }
+                ]
+            }
+        ]
+    },
+    "contact": {
+        "cta_title": "Ready to build the future?",
+        "cta_desc": "I'm currently looking for new opportunities in senior engineering roles or system design. Let's talk about your next project.",
+        "connect_label": "Connect with me",
+        "links": [
+            {
+                "name": "LinkedIn",
+                "url": "#",
+                "icon_svg_path": "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+            },
+            {
+                "name": "GitHub",
+                "url": "#",
+                "icon_svg_path": "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+            }
+        ],
+        "form": {
+            "labels": {
+                "name": "Name",
+                "email": "Email",
+                "message": "Message",
+                "submit": "Send Message"
+            },
+            "placeholders": {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "message": "How can I help you?"
+            },
+            "action": "",
+            "success_message": "Message sent successfully! I'll get back to you soon.",
+            "error_message": "Something went wrong. Please try again."
+        }
+    },
+    "footer": {
+        "logo": "jay.sh",
+        "text": "© 2024 Jay Kuang. Built with precision using Tailwind & Go.",
+        "status_label": "Status:",
+        "status": "Live",
+        "version": "v2.5.0-dynamic"
+    }
+}

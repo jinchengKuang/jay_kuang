@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title id="site-title"></title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0a0a0a",
+                        "surface-dark": "#161b22",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        /* Terminal Styles - Combined Logic */
+        .terminal-header {
+            background: #e2e8f0; /* Light Mode Default */
+        }
+        .dark .terminal-header {
+            background: #21262d; /* Dark Mode Override */
+        }
+        
+        .terminal-body {
+            background: #f1f5f9; /* Light Mode Default */
+            color: #1e293b;
+        }
+        .dark .terminal-body {
+            background: #0d1117; /* Dark Mode Override */
+            color: #cbd5e1;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .theme-toggle-btn {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-toggle-btn .knob {
+            position: absolute;
+            left: 4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .theme-toggle-btn .knob {
+            transform: translateX(28px);
+        }
+        
+        /* Clean Utility Class from Dark Mode File */
+        .skill-badge {
+            @apply px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-surface-dark text-slate-700 dark:text-slate-300 font-mono text-sm hover:border-primary/50 hover:text-primary transition-all cursor-default flex items-center gap-2 shadow-sm;
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-8 right-8 flex flex-col gap-4 z-[100]">
+        <a aria-label="Back to Top"
+            class="size-12 rounded-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-800 shadow-xl flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-all hover:-translate-y-1"
+            href="#">
+            <span class="material-symbols-outlined">arrow_upward</span>
+        </a>
+    </div>
+
+    <!-- Header -->
+    <header
+        class="fixed top-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 glass-nav bg-white/80 dark:bg-background-dark/70 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-sm">terminal</span>
+                </div>
+                <h1 class="font-mono font-bold text-lg tracking-tight" id="site-logo"></h1>
+            </div>
+            <nav class="hidden md:flex items-center gap-8" id="nav-links">
+                <!-- Dynamic Navigation -->
+            </nav>
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button aria-label="Toggle Theme"
+                    class="theme-toggle-btn bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600"
+                    onclick="document.documentElement.classList.toggle('dark')">
+                    <span class="material-symbols-outlined text-[14px] text-amber-500">light_mode</span>
+                    <span class="material-symbols-outlined text-[14px] text-blue-400">dark_mode</span>
+                    <div
+                        class="knob bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700">
+                    </div>
+                </button>
+                <a id="nav-resume-link" href="#" target="_blank"
+                    class="hidden sm:flex bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    <span id="nav-resume-text"></span>
+                </a>
+                <!-- Hamburger Menu Button -->
+                <button id="menu-toggle"
+                    class="md:hidden size-10 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="hidden md:hidden absolute top-16 left-0 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-all duration-300">
+            <nav id="mobile-nav-links" class="flex flex-col p-6 gap-4">
+                <!-- Dynamic Mobile Links -->
+            </nav>
+            <div class="px-6 pb-6">
+                <a id="mobile-resume-link" href="#" target="_blank"
+                    class="w-full bg-primary text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    Resume
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="max-w-6xl mx-auto px-6 py-20 lg:py-32">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6" id="hero-content">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <!-- Terminal Card -->
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-primary to-cyan-500 rounded-xl blur opacity-10 dark:opacity-25 group-hover:opacity-30 dark:group-hover:opacity-50 transition duration-1000 group-hover:duration-200">
+                    </div>
+                    <div
+                        class="relative bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xl font-mono text-sm transition-colors duration-300">
+                        <div class="terminal-header px-4 py-3 flex items-center gap-2 transition-colors duration-300">
+                            <div class="flex gap-1.5">
+                                <div class="size-3 rounded-full bg-[#ff5f56]"></div>
+                                <div class="size-3 rounded-full bg-[#ffbd2e]"></div>
+                                <div class="size-3 rounded-full bg-[#27c93f]"></div>
+                            </div>
+                            <div class="flex-1 text-center text-slate-500 dark:text-slate-400 text-xs"
+                                id="terminal-title"></div>
+                        </div>
+                        <div class="terminal-body p-6 space-y-2 text-slate-700 dark:text-slate-300 transition-colors duration-300"
+                            id="terminal-body">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section
+            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            id="education">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-start" id="education-grid">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6 text-slate-900 dark:text-white" id="edu-heading"></h2>
+                        <div class="relative">
+                            <div
+                                class="absolute left-5 transform -translate-x-px h-full w-0.5 bg-slate-200 dark:bg-slate-800">
+                            </div>
+                            <div class="space-y-12" id="education-degrees">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="certifications-container"
+                        class="bg-slate-50 dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl p-8 transition-colors duration-300">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-900 dark:text-white">
+                            <span class="material-symbols-outlined text-primary">verified</span>
+                            <span id="certs-heading"></span>
+                        </h3>
+                        <div class="space-y-4" id="education-certs">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300"
+            id="experience">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold mb-12 text-slate-900 dark:text-white" id="exp-heading"></h2>
+                <div class="relative">
+                    <div class="absolute left-5 transform -translate-x-px h-full w-0.5 bg-slate-200 dark:bg-slate-800">
+                    </div>
+                    <div class="space-y-12" id="experience-list">
+                        <!-- Dynamic Content -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section
+            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            id="skills">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="flex flex-col mb-12 space-y-2">
+                    <h2 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white" id="skills-heading">
+                    </h2>
+                    <p class="text-slate-500" id="skills-desc"></p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8" id="skills-grid">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300" id="projects">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+                    <div class="space-y-2">
+                        <h2 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white"
+                            id="projects-heading"></h2>
+                        <p class="text-slate-500" id="projects-desc"></p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section
+            class="py-32 relative overflow-hidden bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            id="contact">
+            <div
+                class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none select-none font-mono text-xs hidden lg:block text-slate-900 dark:text-white">
+                <pre id="contact-code"></pre>
+            </div>
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+                    <div class="space-y-8">
+                        <div>
+                            <h2 class="text-5xl font-black mb-6 tracking-tighter text-slate-900 dark:text-white"
+                                id="cta-title"></h2>
+                            <p class="text-xl text-slate-600 dark:text-slate-400 leading-relaxed" id="cta-desc"></p>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-sm font-mono text-primary uppercase tracking-widest font-bold"
+                                id="connect-label"></p>
+                            <div class="flex flex-wrap gap-4" id="social-links">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Contact Form -->
+                    <div
+                        class="bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
+                        <form action="#" class="space-y-6" method="POST" id="contact-form">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="name"
+                                        id="label-name"></label>
+                                    <input
+                                        class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white"
+                                        id="name" name="name" required="" type="text" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="email"
+                                        id="label-email"></label>
+                                    <input
+                                        class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white"
+                                        id="email" name="email" required="" type="email" />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="message"
+                                    id="label-message"></label>
+                                <textarea
+                                    class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white"
+                                    id="message" name="message" required="" rows="4"></textarea>
+                            </div>
+                            <button
+                                class="w-full bg-primary text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center justify-center gap-2"
+                                type="submit" id="submit-btn-content">
+                                <span class="material-symbols-outlined text-sm">send</span>
+                                <span id="submit-text"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer
+        class="border-t border-slate-200 dark:border-slate-800 py-12 bg-white dark:bg-background-dark transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div
+                    class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-slate-500">
+                    <span class="material-symbols-outlined text-xs">terminal</span>
+                </div>
+                <span class="font-mono font-bold text-sm text-slate-900 dark:text-white" id="footer-logo"></span>
+            </div>
+            <p class="text-slate-500 text-sm" id="footer-text"></p>
+            <div class="flex items-center gap-6 text-sm text-slate-400 font-mono">
+                <span class="flex items-center gap-1">
+                    <span class="size-2 rounded-full bg-green-500"></span>
+                    <span id="status-label"></span>
+                    <span id="status-text"></span>
+                </span>
+                <span class="hidden md:inline" id="version-text"></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-[200] flex items-center gap-3">
+        <span id="toast-icon" class="material-symbols-outlined text-white">check_circle</span>
+        <span id="toast-message" class="font-medium text-white"></span>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
