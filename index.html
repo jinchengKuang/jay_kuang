@@ -11,6 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -34,58 +35,69 @@
     </script>
     <style type="text/tailwindcss">
         .glass-nav {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            @apply backdrop-blur-xl bg-white/80 dark:bg-background-dark/70;
         }
         
-        /* Terminal Styles - Combined Logic */
         .terminal-header {
-            background: #e2e8f0; /* Light Mode Default */
-        }
-        .dark .terminal-header {
-            background: #21262d; /* Dark Mode Override */
+            @apply bg-slate-200 dark:bg-[#21262d];
         }
         
         .terminal-body {
-            background: #f1f5f9; /* Light Mode Default */
-            color: #1e293b;
-        }
-        .dark .terminal-body {
-            background: #0d1117; /* Dark Mode Override */
-            color: #cbd5e1;
+            @apply bg-slate-100 dark:bg-[#0d1117] text-slate-800 dark:text-slate-300;
         }
 
         html {
-            scroll-behavior: smooth;
+            @apply scroll-smooth;
         }
         
         .theme-toggle-btn {
-            position: relative;
-            width: 56px;
-            height: 28px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            @apply relative w-14 h-7 rounded-full flex items-center justify-between p-1 cursor-pointer transition-all duration-300;
         }
         .theme-toggle-btn .knob {
-            position: absolute;
-            left: 4px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            @apply absolute left-1 w-5 h-5 rounded-full transition-all duration-300 bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700;
         }
         .dark .theme-toggle-btn .knob {
-            transform: translateX(28px);
+            @apply translate-x-7;
         }
         
-        /* Clean Utility Class from Dark Mode File */
         .skill-badge {
             @apply px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-surface-dark text-slate-700 dark:text-slate-300 font-mono text-sm hover:border-primary/50 hover:text-primary transition-all cursor-default flex items-center gap-2 shadow-sm;
+        }
+        .skill-badge i, .skill-badge span {
+            @apply grayscale opacity-70 transition-all duration-300;
+        }
+        .skill-badge:hover i, .skill-badge:hover span {
+            @apply grayscale-0 opacity-100 text-primary;
+        }
+
+        .reveal {
+            @apply opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)];
+        }
+        .reveal.active {
+            @apply opacity-100 translate-y-0;
+        }
+
+        #dot-nav .dot {
+            @apply w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 transition-all duration-300 cursor-pointer relative;
+        }
+        #dot-nav .dot.active {
+            @apply bg-primary scale-150 shadow-[0_0_15px_rgba(19,91,236,0.4)];
+        }
+        #dot-nav .dot:hover {
+            @apply bg-primary;
+        }
+        #dot-nav .dot::after {
+            content: attr(data-label);
+            @apply absolute right-5 top-1/2 -translate-y-1/2 translate-x-2 bg-slate-800 text-white px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-all duration-300;
+        }
+        #dot-nav .dot:hover::after {
+            @apply opacity-100 translate-x-0;
+        }
+
+        @media (min-width: 1440px) {
+            #dot-nav {
+                @apply flex;
+            }
         }
     </style>
 </head>
@@ -101,17 +113,22 @@
         </a>
     </div>
 
+    <!-- Dot Navigation -->
+    <div id="dot-nav" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-[100] hidden">
+        <!-- Dynamic dots will be injected here -->
+    </div>
+
     <!-- Header -->
     <header
         class="fixed top-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 glass-nav bg-white/80 dark:bg-background-dark/70 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
+            <a href="#home" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                 <div class="size-8 bg-primary rounded flex items-center justify-center text-white">
                     <span class="material-symbols-outlined text-sm">terminal</span>
                 </div>
                 <h1 class="font-mono font-bold text-lg tracking-tight" id="site-logo"></h1>
-            </div>
-            <nav class="hidden md:flex items-center gap-8" id="nav-links">
+            </a>
+            <nav class="hidden lg:flex items-center gap-8" id="nav-links">
                 <!-- Dynamic Navigation -->
             </nav>
             <div class="flex items-center gap-4">
@@ -126,20 +143,20 @@
                     </div>
                 </button>
                 <a id="nav-resume-link" href="#" target="_blank"
-                    class="hidden sm:flex bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all items-center gap-2">
+                    class="flex bg-primary hover:bg-primary/90 text-white px-3 sm:px-5 py-2 rounded-lg text-sm font-bold transition-all items-center gap-2">
                     <span class="material-symbols-outlined text-sm">download</span>
                     <span id="nav-resume-text"></span>
                 </a>
                 <!-- Hamburger Menu Button -->
                 <button id="menu-toggle"
-                    class="md:hidden size-10 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                    class="lg:hidden size-10 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
             </div>
         </div>
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu"
-            class="hidden md:hidden absolute top-16 left-0 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-all duration-300">
+            class="hidden lg:hidden absolute top-16 left-0 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-all duration-300">
             <nav id="mobile-nav-links" class="flex flex-col p-6 gap-4">
                 <!-- Dynamic Mobile Links -->
             </nav>
@@ -155,7 +172,7 @@
 
     <main class="pt-16">
         <!-- Hero Section -->
-        <section class="max-w-6xl mx-auto px-6 py-20 lg:py-32">
+        <section id="home" class="max-w-6xl mx-auto px-6 py-20 lg:py-32 reveal">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6" id="hero-content">
                     <!-- Dynamic Content -->
@@ -188,7 +205,7 @@
 
         <!-- Education Section -->
         <section
-            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300 reveal"
             id="education">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-16 items-start" id="education-grid">
@@ -218,7 +235,7 @@
         </section>
 
         <!-- Experience Section -->
-        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300"
+        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300 reveal"
             id="experience">
             <div class="max-w-6xl mx-auto px-6">
                 <h2 class="text-4xl font-bold mb-12 text-slate-900 dark:text-white" id="exp-heading"></h2>
@@ -234,7 +251,7 @@
 
         <!-- Skills Section -->
         <section
-            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            class="py-24 bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300 reveal"
             id="skills">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="flex flex-col mb-12 space-y-2">
@@ -249,7 +266,8 @@
         </section>
 
         <!-- Projects Section -->
-        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300" id="projects">
+        <section class="py-24 bg-background-light dark:bg-background-dark transition-colors duration-300 reveal"
+            id="projects">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
                     <div class="space-y-2">
@@ -266,7 +284,7 @@
 
         <!-- Contact Section -->
         <section
-            class="py-32 relative overflow-hidden bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300"
+            class="py-32 relative overflow-hidden bg-white dark:bg-[#0d1117] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300 reveal"
             id="contact">
             <div
                 class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none select-none font-mono text-xs hidden lg:block text-slate-900 dark:text-white">
@@ -292,6 +310,8 @@
                     <div
                         class="bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
                         <form action="#" class="space-y-6" method="POST" id="contact-form">
+                            <!-- Honeypot -->
+                            <input type="text" name="_gotcha" style="display:none" />
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="name"
@@ -331,13 +351,12 @@
     <footer
         class="border-t border-slate-200 dark:border-slate-800 py-12 bg-white dark:bg-background-dark transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2">
-                <div
-                    class="size-6 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-slate-500">
-                    <span class="material-symbols-outlined text-xs">terminal</span>
+            <a href="#home" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-sm">terminal</span>
                 </div>
                 <span class="font-mono font-bold text-sm text-slate-900 dark:text-white" id="footer-logo"></span>
-            </div>
+            </a>
             <p class="text-slate-500 text-sm" id="footer-text"></p>
             <div class="flex items-center gap-6 text-sm text-slate-400 font-mono">
                 <span class="flex items-center gap-1">

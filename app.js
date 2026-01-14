@@ -33,6 +33,9 @@ async function loadContent() {
         renderContact(data.contact, data.profile);
         renderFooter(data.footer);
 
+        // Setup Scroll Animations and Dot Navigation
+        setupScrollSystem();
+
     } catch (error) {
         console.error('Could not load content:', error);
     }
@@ -62,11 +65,22 @@ function renderSite(site, profile) {
     `).join('');
     document.getElementById('mobile-nav-links').innerHTML = mobileNavHtml;
 
+    // Render Dot Navigation
+    const dotNav = document.getElementById('dot-nav');
+    if (dotNav) {
+        dotNav.innerHTML = site.nav.map(link => {
+            const id = link.url === '#' ? 'home' : link.url.replace('#', '');
+            return `<div class="dot" data-id="${id}" data-label="${link.name}" onclick="document.getElementById('${id}').scrollIntoView({behavior: 'smooth'})"></div>`;
+        }).join('');
+    }
+
     // Navbar Resume Links
     if (profile && profile.resume_url) {
         document.getElementById('nav-resume-link').href = profile.resume_url;
+        document.getElementById('nav-resume-link').setAttribute('download', '');
         document.getElementById('nav-resume-text').innerText = "Resume";
         document.getElementById('mobile-resume-link').href = profile.resume_url;
+        document.getElementById('mobile-resume-link').setAttribute('download', '');
     }
 
     // Setup Menu Toggle
@@ -126,7 +140,7 @@ function renderProfile(profile) {
             ${profile.availability}
         </div>
         <h1 class="text-5xl lg:text-7xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
-            Software <span class="text-primary">${profile.role_highlight || "Architect"}</span> &amp; Engineer.
+            ${profile.title_prefix || "Software"} <span class="text-primary">${profile.role_highlight || "Architect"}</span> ${profile.title_suffix || "&amp; Engineer."}
         </h1>
         <p class="text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
             ${profile.hero_text}
@@ -263,6 +277,39 @@ function renderExperience(exp) {
  * Renders the Skills grid.
  * @param {Object} skills - Skills data object.
  */
+/**
+ * Helper to get icon HTML for a skill.
+ */
+function getSkillIcon(skill) {
+    // We'll use devicon classes where possible, or high-quality material icons.
+    // To ensure "black and white", we use -plain or -line variants and avoid color classes.
+    const skillMap = {
+        'Python': '<i class="devicon-python-plain"></i>',
+        'JavaScript': '<i class="devicon-javascript-plain"></i>',
+        'TypeScript': '<i class="devicon-typescript-plain"></i>',
+        'Java': '<i class="devicon-java-plain"></i>',
+        'SQL': '<i class="devicon-mysql-plain"></i>', // Common representation for SQL
+        'React': '<i class="devicon-react-original"></i>',
+        'Next': '<i class="devicon-nextjs-plain"></i>',
+        'Node': '<i class="devicon-nodejs-plain"></i>',
+        'Express': '<i class="devicon-express-original"></i>',
+        'Jest': '<i class="devicon-jest-plain"></i>',
+        'Selenium': '<i class="devicon-selenium-original"></i>',
+        'GitLab': '<i class="devicon-gitlab-plain"></i>',
+        'Jenkins': '<i class="devicon-jenkins-line"></i>',
+        'Docker': '<i class="devicon-docker-plain"></i>',
+        'REST APIs': '<span class="material-symbols-outlined text-[18px]">api</span>',
+        'CI/CD': '<span class="material-symbols-outlined text-[18px]">all_inclusive</span>', // Loop icon common for CI/CD
+        'JUnit': '<i class="devicon-junit-plain"></i>',
+        'Splunk': `<svg class="size-4 fill-current" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.396 11.93V0l53.207 26.698V37.49L5.396 64V52.26L46.675 32z" />
+        </svg>`
+    };
+
+    // Note: CSS will handle the "Black and White" requirement by making all icons slate/neutral.
+    return skillMap[skill] || '<span class="material-symbols-outlined text-[18px]">terminal</span>';
+}
+
 function renderSkills(skills) {
     if (!skills) return;
 
@@ -275,7 +322,12 @@ function renderSkills(skills) {
                 <span class="material-symbols-outlined text-lg">${cat.icon}</span> ${cat.category}
             </h3>
             <div class="flex flex-wrap gap-3">
-                ${cat.items.map(s => `<div class="skill-badge">${s}</div>`).join('')}
+                ${cat.items.map(s => `
+                    <div class="skill-badge">
+                        ${getSkillIcon(s)}
+                        ${s}
+                    </div>
+                `).join('')}
             </div>
         </div>
     `).join('');
@@ -368,7 +420,7 @@ function renderContact(contact, profile) {
     // Dynamic resume button in contact section
     const resumeUrl = profile && profile.resume_url ? profile.resume_url : '#';
     const downloadBtn = `
-         <a class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 shadow-sm" href="${resumeUrl}" target="_blank">
+         <a class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 shadow-sm" href="${resumeUrl}" download target="_blank">
             <span class="material-symbols-outlined text-sm">download</span>
             Resume
         </a>
@@ -463,6 +515,53 @@ function renderFooter(footer) {
     document.getElementById('status-label').innerText = footer.status_label;
     document.getElementById('status-text').innerText = footer.status;
     document.getElementById('version-text').innerText = footer.version;
+}
+
+/**
+ * Initializes Intersection Observer for scroll animations and dot navigation updates.
+ */
+function setupScrollSystem() {
+    const sections = document.querySelectorAll('section.reveal');
+    const dots = document.querySelectorAll('#dot-nav .dot');
+
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Reveal section animation
+                entry.target.classList.add('active');
+
+                // Update active dot navigation
+                const sectionId = entry.target.id;
+                dots.forEach(dot => {
+                    if (dot.dataset.id === sectionId) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            } else {
+                // Remove active class to make animation repeatable
+                entry.target.classList.remove('active');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+
+    // Initial check in case some sections are already in view
+    setTimeout(() => {
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                section.classList.add('active');
+            }
+        });
+    }, 100);
 }
 
 // Start the content loading process
