@@ -235,5 +235,8 @@
         "status_label": "Status:",
         "status": "Live",
         "version": "v1.0.1"
+    },
+    "analytics": {
+        "google_id": "G-C8SYYJFCP3"
     }
 }

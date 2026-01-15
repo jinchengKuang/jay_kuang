@@ -32,6 +32,7 @@ async function loadContent() {
         renderProjects(data.projects);
         renderContact(data.contact, data.profile);
         renderFooter(data.footer);
+        renderAnalytics(data.analytics);
 
         // Setup Scroll Animations and Dot Navigation
         setupScrollSystem();
@@ -353,7 +354,7 @@ function renderProjects(projects) {
                 <div class="flex justify-between items-start">
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">${p.title}</h3>
                     <div class="flex gap-2">
-                        ${p.links.map(l => `<span class="material-symbols-outlined text-slate-400 hover:text-primary cursor-pointer text-xl">${l.type === 'link' ? 'link' : 'code'}</span>`).join('')}
+                        ${p.links.map(l => `<a href="${l.url}" target="_blank" class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors text-xl" title="${l.type === 'link' ? 'Live Demo' : 'Source Code'}">${l.type === 'link' ? 'link' : 'code'}</a>`).join('')}
                     </div>
                 </div>
                 <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
@@ -515,6 +516,30 @@ function renderFooter(footer) {
     document.getElementById('status-label').innerText = footer.status_label;
     document.getElementById('status-text').innerText = footer.status;
     document.getElementById('version-text').innerText = footer.version;
+}
+
+/**
+ * Injects Google Analytics script if a valid ID is provided.
+ * @param {Object} analytics - Analytics data object.
+ */
+function renderAnalytics(analytics) {
+    if (!analytics || !analytics.google_id || analytics.google_id === 'G-XXXXXXXXXX') {
+        return;
+    }
+
+    // Inject GA Tag Script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${analytics.google_id}`;
+    document.head.appendChild(script);
+
+    // Initialize GA
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', analytics.google_id);
+
+    console.log('Analytics initialized');
 }
 
 /**
