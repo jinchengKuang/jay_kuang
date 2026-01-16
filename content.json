@@ -35,7 +35,7 @@
         "role_highlight": "Development",
         "title_prefix": "Software",
         "title_suffix": "Engineer",
-        "hero_text": "Solid 4 years of experience delivering high-performance production-ready web applications",
+        "hero_text": "Solid 4 years of experience delivering high-performance production-ready web applications.",
         "availability": "AVAILABLE FOR OPPORTUNITIES",
         "github_url": "https://github.com/jinchengKuang",
         "linkedin_url": "https://linkedin.com/in/jay-kuang",
@@ -84,7 +84,7 @@
                 "school": "Georgia Institute of Technology",
                 "year": "2022 - 2025",
                 "details": [
-                    "Sharpened my computer science fundamentals with life-long learning attitude",
+                    "Sharpened my computer science fundamentals with life-long learning attitude.",
                     "Algorithms & Data Structures | Software Design | Machine Learning...",
                     "GPA: 3.8/4.0"
                 ]
@@ -94,7 +94,7 @@
                 "school": "Seneca College",
                 "year": "2020 - 2022",
                 "details": [
-                    "Proudly switching career path to Software Engineering",
+                    "Proudly switching career path to Software Engineering.",
                     "GPA: 4.0/4.0, Dean's List"
                 ]
             },
@@ -103,7 +103,7 @@
                 "school": "University of Waterloo",
                 "year": "2014 - 2016",
                 "details": [
-                    "Enlightened by the computer science world",
+                    "Enlightened by the world of computer science.",
                     "GPA: 3.6/4.0"
                 ]
             }

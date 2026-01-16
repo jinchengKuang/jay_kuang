@@ -80,8 +80,6 @@ function renderSite(site, profile) {
         document.getElementById('nav-resume-link').href = profile.resume_url;
         document.getElementById('nav-resume-link').setAttribute('download', '');
         document.getElementById('nav-resume-text').innerText = "Resume";
-        document.getElementById('mobile-resume-link').href = profile.resume_url;
-        document.getElementById('mobile-resume-link').setAttribute('download', '');
     }
 
     // Setup Menu Toggle
@@ -94,7 +92,17 @@ function renderSite(site, profile) {
         icon.innerText = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
     };
 
-    menuToggle.onclick = toggleMenu;
+    menuToggle.onclick = (e) => {
+        e.stopPropagation();
+        toggleMenu();
+    };
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            toggleMenu();
+        }
+    });
 }
 
 /**
@@ -393,20 +401,6 @@ function renderContact(contact, profile) {
     document.getElementById('name').placeholder = contact.form.placeholders.name;
     document.getElementById('email').placeholder = contact.form.placeholders.email;
     document.getElementById('message').placeholder = contact.form.placeholders.message;
-
-    // Connect Code Snippet (Hardcoded default if not in JSON, but I added it for future)
-    const codeSnippet = `func main() {
-    client := NewContactClient()
-    msg := &Message{
-        From: "Recruiter",
-        Body: "We're hiring!",
-    }
-    err := client.Send(msg)
-    if err != nil {
-        panic(err)
-    }
-}`;
-    document.getElementById('contact-code').innerText = codeSnippet;
 
     // Generate social links
     const linksHtml = contact.links.map(link => `
